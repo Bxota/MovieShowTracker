@@ -1,30 +1,25 @@
 package com.thomas.movieshowtracker.ui.movie
 
+import android.content.Context.MODE_PRIVATE
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import com.thomas.movieshowtracker.InformationActivity
+import com.thomas.movieshowtracker.SaveList
 import com.thomas.movieshowtracker.databinding.FragmentMovieBinding
+import com.thomas.movieshowtracker.ui.show.ShowViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MovieFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MovieFragment : Fragment() {
+class MovieFragment : Fragment(), View.OnClickListener, MovieListAdapter.CellClickListener {
     private var _binding: FragmentMovieBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private val binding by lazy { FragmentMovieBinding.inflate(layoutInflater) }
+    private val model by lazy { ViewModelProvider(this)[ShowViewModel::class.java] }
+    val adapter = MovieListAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,20 +27,39 @@ class MovieFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val movieViewModel =
-            ViewModelProvider(this).get(MovieViewModel::class.java)
+            ViewModelProvider(this)[MovieViewModel::class.java]
 
         _binding = FragmentMovieBinding.inflate(inflater, container, false)
+        super.onCreate(savedInstanceState)
         val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
-        movieViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        binding.rv.adapter = adapter
+        binding.rv.layoutManager = GridLayoutManager(activity,3)
+
+        val mPrefs : SharedPreferences? = activity?.getSharedPreferences("Watch", MODE_PRIVATE)
+        model.SyncDataMovies(SaveList.loadData(mPrefs!!, "Watch").movies!!)
+        model.dataMovies.observe(viewLifecycleOwner) {
+            if (it != null) {
+                adapter.submitList(model.dataMovies.value?.toList())
+            }
         }
+
         return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onClick(p0: View?) {
+
+    }
+
+    override fun onCellClickListener(data: Int) {
+        val intent = Intent(activity,InformationActivity::class.java)
+        intent.putExtra("id", data.toString())
+        intent.putExtra("type", "movies")
+        activity?.startActivity(intent)
     }
 }

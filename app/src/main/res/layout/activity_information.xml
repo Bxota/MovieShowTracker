@@ -34,9 +34,10 @@
         android:layout_height="147dp"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,21 +45,87 @@
             android:orientation="vertical"
             android:paddingBottom="10dp">
 
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textAlignment="center"
-                android:textSize="36sp" />
+                android:layout_gravity="center"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvCreation"
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textSize="36sp"
+                    tools:text="FRIENDS" />
+
+                <TextView
+                    android:id="@+id/tvCreation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text=""
+                    android:textSize="12sp"
+                    tools:text="1996" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="12sp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btAddWatch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:onClick="btAddWatchList"
+                        android:text="Add to WatchList" />
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:onClick="btRemoveWatch"
+                        app:srcCompat="@drawable/ic_baseline_horizontal_rule_24" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btAddWish"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:onClick="btAddWishList"
+                        android:text="Add to WishList" />
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:onClick="btRemoveWish"
+                        app:srcCompat="@drawable/ic_baseline_horizontal_rule_24" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvWhere2watch"
@@ -72,31 +139,11 @@
                 android:layout_marginBottom="8dp"
                 android:background="#575757" />
 
-            <ScrollView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvVOD"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/app_name">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="140dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        tools:srcCompat="@tools:sample/avatars" />
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="140dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        tools:srcCompat="@tools:sample/avatars" />
-
-                </LinearLayout>
-            </ScrollView>
+                android:layout_gravity="center" />
 
             <TextView
                 android:id="@+id/tvSysnopis"
@@ -168,6 +215,7 @@
                     android:layout_weight="1"
                     app:srcCompat="@drawable/ic_baseline_star_24" />
             </LinearLayout>
+
             <TextView
                 android:id="@+id/tvCasting"
                 android:layout_width="match_parent"
@@ -181,65 +229,11 @@
                 android:background="#575757" />
 
 
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCasting"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/imCasting1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        tools:srcCompat="@tools:sample/avatars" />
-
-                    <ImageView
-                        android:id="@+id/imCasting2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        tools:srcCompat="@tools:sample/avatars" />
-
-                    <ImageView
-                        android:id="@+id/imCasting3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        tools:srcCompat="@tools:sample/avatars" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/imCasting4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        tools:srcCompat="@tools:sample/avatars" />
-
-                    <ImageView
-                        android:id="@+id/imCasting5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        tools:srcCompat="@tools:sample/avatars" />
-
-                    <ImageView
-                        android:id="@+id/imCasting6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        tools:srcCompat="@tools:sample/avatars" />
-                </LinearLayout>
-            </LinearLayout>
+                />
 
             <TextView
                 android:id="@+id/tvTest"
@@ -247,5 +241,6 @@
                 android:layout_height="wrap_content"
                 android:text="TextView" />
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
+
 </LinearLayout>

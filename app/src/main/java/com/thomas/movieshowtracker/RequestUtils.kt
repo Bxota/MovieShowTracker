@@ -26,7 +26,7 @@ public class RequestUtils{
         }
 
 
-        data class MYBean(var url: String, var title:String)
+        data class MYBean(var url: String?, var title:String)
         fun loadSearchShowsV2(search :String): List<MYBean> {
             var json: String = sendGet(URL_API_SHOWS.format(search))
             return Gson().fromJson(json, SearchShowsBean::class.java).shows.map {
@@ -39,9 +39,9 @@ public class RequestUtils{
             var json: String = sendGet(URL_API_SHOWS_INFORMATION.format(search))
             return Gson().fromJson(json, ShowsInformationBean::class.java)
         }
-        fun loadCastingShows(search :String): CastingShowsBean? {
+        fun loadCastingShows(search :String): ArrayList<CharactersBean>? {
             var json: String = sendGet(URL_API_CASTING.format(search))
-            return Gson().fromJson(json, CastingShowsBean::class.java)
+            return Gson().fromJson(json, CastingShowsBean::class.java).characters
         }
 
         fun loadSearchMovies(search :String): ArrayList<PosterBean>? {

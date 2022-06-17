@@ -10,15 +10,17 @@ class SearchAPIViewModel : ViewModel() {
     val errorMessage = MutableLiveData<String?>()
     val runInProgress = MutableLiveData(false)
 
-    //val dataShows = MutableLiveData(ArrayList<PosterBean>())
+    val dataShows = MutableLiveData(ArrayList<PosterBean>())
     val informationShows = MutableLiveData<ShowsInformationBean?>()
-    val castingShows = MutableLiveData<CastingShowsBean?>()
+    /*val castingShows = MutableLiveData<CastingShowsBean?>()*/
 
-    val dataMovies = MutableLiveData<ArrayList<PosterBean>?>()
+    val vodShows = MutableLiveData(ArrayList<SvodsBean>())
+    val castingShows = MutableLiveData(ArrayList<CharactersBean>())
+
+    val dataMovies = MutableLiveData<ArrayList<PosterBean>>()
     val informationMovies = MutableLiveData<MoviesInformationBean?>()
     //val castingMovies = MutableLiveData<CastingShowsBean?>()
 
-    val dataShows = MutableLiveData(ArrayList<PosterBean>())
     fun loadShowsData(search :String) {
         println(search)
         runInProgress.postValue(true)
@@ -36,6 +38,7 @@ class SearchAPIViewModel : ViewModel() {
         thread {
             try {
                 informationShows.postValue(RequestUtils.loadInformationShows(search))
+                vodShows.postValue(RequestUtils.loadInformationShows(search)?.show?.platforms?.svods)
             } catch (e: Exception) {
                 e.printStackTrace()
                 errorMessage.postValue(e.message)

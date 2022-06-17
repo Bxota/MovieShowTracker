@@ -1,4 +1,4 @@
-package com.thomas.movieshowtracker
+package com.thomas.movieshowtracker.ui.account
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import com.thomas.movieshowtracker.PosterBean
 import com.thomas.movieshowtracker.databinding.RowSearchBinding
-import kotlin.math.min
 
-class SearchListAdapter(private val cellClickListener: CellClickListener) : ListAdapter<PosterBean, SearchListAdapter.ViewHolder>(Comparator()) {
+class AccountListAdapter(private val cellClickListener: CellClickListener) : ListAdapter<PosterBean, AccountListAdapter.ViewHolder>(Comparator()) {
     class ViewHolder(val bind: RowSearchBinding) : RecyclerView.ViewHolder(bind.root)
 
     class Comparator : DiffUtil.ItemCallback<PosterBean>() {
@@ -21,11 +21,6 @@ class SearchListAdapter(private val cellClickListener: CellClickListener) : List
 
     interface CellClickListener {
         fun onCellClickListener (data: Int)
-    }
-
-    override fun getItemCount(): Int {
-        var limit = 18
-        return min(super.getItemCount(), limit)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder

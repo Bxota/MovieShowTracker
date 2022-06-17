@@ -1,23 +1,38 @@
 package com.thomas.movieshowtracker
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.squareup.picasso.Picasso
 import com.thomas.movieshowtracker.databinding.ActivityInformationBinding
 
-class InformationActivity : AppCompatActivity(), View.OnClickListener {
+class InformationActivity : AppCompatActivity(), View.OnClickListener, CastingListAdapter.ClickCasting{
 
     private lateinit var binding: ActivityInformationBinding
     private val model by lazy { ViewModelProvider(this)[SearchAPIViewModel::class.java] }
+    val adapterVod = VodListAdapter()
+    val adapterCasting = CastingListAdapter(this)
+    var posterShow :String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.rvCasting.isNestedScrollingEnabled = false
+
+        binding.rvVOD.adapter = adapterVod
+        binding.rvVOD.layoutManager = GridLayoutManager(this, 5)
+
+        binding.rvCasting.adapter = adapterCasting
+        binding.rvCasting.layoutManager = GridLayoutManager(this, 3)
 
         if (intent.getStringExtra("type").toString() == "shows") {
             model.loadInformationShows(intent.getStringExtra("id").toString())
@@ -28,21 +43,27 @@ class InformationActivity : AppCompatActivity(), View.OnClickListener {
             //model.loadCastingShows()
         }
 
+        model.vodShows.observe(this) {
+            if (it != null) {
+                adapterVod.submitList(model.vodShows.value?.toList())
+            }
+        }
+        model.castingShows.observe(this) {
+            if (it != null) {
+                adapterCasting.submitList(model.castingShows.value?.toList())
+            }
+        }
+
         binding.tvTest.text = intent.getStringExtra("id").toString()
         println(intent.getStringExtra("type"))
 
         model.informationShows.observe(this) { it ->
             if (it != null) {
+                posterShow = it.show.images.poster
                 Picasso.get().load(it.show.images.banner).fit().centerCrop().into(binding.imBanner)
                 binding.tvTitle.text = it.show.title
                 binding.tvCreation.text = it.show.creation
-                val tab = arrayOf<ImageView>(binding.imageView, binding.imageView2)
-                if (it.show.platforms != null && it.show.platforms.svods != null) {
-                    var timesVod :Int = if(it.show.platforms.svods.size > 2) 2 else it.show.platforms.svods.size
-                    repeat(timesVod) { i ->
-                        Picasso.get().load(it.show.platforms.svods[i].logo).into(tab[i])
-                    }
-                }
+                //val tab = arrayOf<ImageView>(binding.imageView, binding.imageView2)
                 binding.tvDescrition.text = it.show.description
                 if (it.show.notes.mean < 5 && it.show.notes.mean > 4.5) {
                     binding.imStar5.setImageResource(R.drawable.ic_baseline_star_half_24)
@@ -96,27 +117,13 @@ class InformationActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
-        model.castingShows.observe(this) {
-            if (it != null) {
-                val tabCasting = arrayOf<ImageView>(binding.imCasting1, binding.imCasting2, binding.imCasting3, binding.imCasting4, binding.imCasting5, binding.imCasting6)
-                var timesCasting :Int = if(it.characters.size > 6) 6 else it.characters.size
-                repeat(timesCasting) { i ->
-                    Picasso.get().load(it.characters[i].picture).into(tabCasting[i])
-                }
-            }
-        }
         model.informationMovies.observe(this) { it ->
             if (it != null) {
+                posterShow = it.movie.poster
                 Picasso.get().load(it.movie.backdrop).fit().centerCrop().into(binding.imBanner)
                 binding.tvTitle.text = it.movie.title
                 binding.tvCreation.text = it.movie.release_date
-                val tab = arrayOf<ImageView>(binding.imageView, binding.imageView2)
-                /*if (it.movie.platform_links != null) {
-                    var timesVod :Int = if(it.movie.platforms.svods.size > 2) 2 else it.show.platforms.svods.size
-                    repeat(timesVod) { i ->
-                        Picasso.get().load(it.show.platforms.svods[i].logo).into(tab[i])
-                    }
-                }*/
+                //val tab = arrayOf<ImageView>(binding.imageView, binding.imageView2)
                 binding.tvDescrition.text = it.movie.synopsis
                 if (it.movie.notes.mean < 5 && it.movie.notes.mean > 4.5) {
                     binding.imStar5.setImageResource(R.drawable.ic_baseline_star_half_24)
@@ -179,6 +186,46 @@ class InformationActivity : AppCompatActivity(), View.OnClickListener {
                 finish()
             }
         }
+    }
+
+    override fun onClickCasting(data : String) {
+        Toast.makeText(this, data, Toast.LENGTH_SHORT).show()
+    }
+
+    fun btAddWatchList(view: View) {
+        val mPrefs : SharedPreferences = getSharedPreferences("Watch", MODE_PRIVATE)
+        val id : Int? = intent.getStringExtra("id")?.toInt()
+        println("id:$id")
+        val Poster = PosterBean(posterShow, "", id)
+        if (intent.getStringExtra("type").toString() == "shows") {
+            ListWatch.shows?.add(Poster)
+        } else if (intent.getStringExtra("type").toString() == "movies") {
+            ListWatch.movies?.add(Poster)
+        }
+        println(ListWatch.movies!!)
+        SaveList.saveData(mPrefs, ListWatch, "Watch", intent.getStringExtra("type").toString())
+    }
+    fun btAddWishList(view: View) {
+        val mPrefs : SharedPreferences = getSharedPreferences("Wish", MODE_PRIVATE)
+        val id : Int? = intent.getStringExtra("id")?.toInt()
+        val Poster = PosterBean(posterShow, "", id)
+        if (intent.getStringExtra("type").toString() == "shows") {
+            ListWish.shows?.add(Poster)
+        } else if (intent.getStringExtra("type").toString() == "movies") {
+            ListWish.movies?.add(Poster)
+        }
+        SaveList.saveData(mPrefs, ListWish, "Wish", intent.getStringExtra("type").toString())
+    }
+
+    fun btRemoveWatch(view: View) {
+        val mPrefs : SharedPreferences = getSharedPreferences("Watch", MODE_PRIVATE)
+        val id : Int? = intent.getStringExtra("id")?.toInt()
+        SaveList.removeData(mPrefs, id!!, "Watch", intent.getStringExtra("type").toString())
+    }
+    fun btRemoveWish(view: View) {
+        val mPrefs : SharedPreferences = getSharedPreferences("Wish", MODE_PRIVATE)
+        val id : Int? = intent.getStringExtra("id")?.toInt()
+        SaveList.removeData(mPrefs, id!!, "Wish", intent.getStringExtra("type").toString())
     }
 }
 

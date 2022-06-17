@@ -12,8 +12,12 @@
         <entry key="app/src/main/res/layout/fragment_movie.xml" value="0.37083333333333335" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.3541666666666667" />
+        <entry key="app/src/main/res/layout/fragment_show.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/row_casting.xml" value="0.3692708333333333" />
         <entry key="app/src/main/res/layout/row_search.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/row_vod.xml" value="0.3692708333333333" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.37083333333333335" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.337" />
       </map>
     </option>
   </component>

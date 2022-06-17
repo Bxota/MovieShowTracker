@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1025992121024",
+    "project_id": "movieshowtracker",
+    "storage_bucket": "movieshowtracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1025992121024:android:cd020457b155fd87872b25",
+        "android_client_info": {
+          "package_name": "com.thomas.movieshowtracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1025992121024-o03kqo98c75k24sj0kdbi3d36p6sau0o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeHBZgWojnG3UyAJ68wpryI83vSgjnJ_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1025992121024-o03kqo98c75k24sj0kdbi3d36p6sau0o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

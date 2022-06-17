@@ -1,15 +1,20 @@
 package com.thomas.movieshowtracker
 
+import android.content.SharedPreferences
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
 import com.thomas.movieshowtracker.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+public var ListWatch = ListBean(ArrayList<PosterBean>(), ArrayList<PosterBean>())
+public var ListWish = ListBean(ArrayList<PosterBean>(), ArrayList<PosterBean>())
+
+open class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -18,6 +23,11 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        var share = SaveList(getPreferences(MODE_PRIVATE))
+        //val mPrefs :SharedPreferences = getPreferences(MODE_PRIVATE)
+        //SaveList.saveData(mPrefs)
+        //SaveList.loadData(mPrefs)
 
         val navView: BottomNavigationView = binding.navView
 
